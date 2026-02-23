@@ -6,13 +6,58 @@ class AuthorService:
         self.repository = AuthorRepository()
 
     def create_author(self, name):
-        # Aqui é onde regras de negócio ficariam
-        # Exemplo: validar tamanho do nome, impedir nome vazio etc.
-
+        # Valida o nome do autor (não pode ser vazio)
         if not name:
             raise ValueError("Author name cannot be empty")
 
+       # Verifica se já existe autor com mesmo nome
+        existing_author = self.repository.get_by_name(name)
+        if existing_author:
+            raise ValueError("Author already exists")
+        # Se passar nas validações, cria o autor
         return self.repository.create(name)
 
     def list_authors(self):
+        # Retorna todos os autores cadastrados.
         return self.repository.get_all()
+    
+    def get_author_by_id(self, author_id):
+        # Retorna um autor pelo ID ou lança um erro se não encontrado
+        author = self.repository.get_by_id(author_id)
+        # Se o autor não existir, lança um erro
+        if not author:
+            raise ValueError("Author not found")
+        # Se existir, retorna o autor
+        return author
+
+    def update_author(self, author_id, name):
+        # Verifica se o autor existe
+        author = self.repository.get_by_id(author_id)
+
+        if not author:
+            raise ValueError("Author not found")
+
+        # Validação de nome
+        if not name or not name.strip():
+            raise ValueError("Author name cannot be empty")
+
+        # Verifica duplicidade (exceto ele mesmo)
+        existing_author = self.repository.get_by_name(name)
+
+        if existing_author and existing_author.id != author_id:
+            raise ValueError("Author name already in use")
+        
+        # Atualiza o nome
+        author.name = name
+        # Salva as alterações no banco
+        return self.repository.update(author)
+
+    def delete_author(self, author_id):
+        # Verifica se o autor existe
+        author = self.repository.get_by_id(author_id)
+        # Se não existir, lança um erro
+        if not author:
+            raise ValueError("Author not found")
+        # Se existir, deleta o autor
+        self.repository.delete(author)
+    
