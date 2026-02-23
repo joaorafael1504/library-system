@@ -15,4 +15,5 @@ class Author(Base):
 
     # Nome do autor (campo obrigatório)
     # nullable=False significa que não pode ser nulo
-    name = Column(String, nullable=False)
+    # unique=True significa que não pode haver dois autores com o mesmo nome
+    name = Column(String(100), nullable=False, unique=True)
