@@ -2,8 +2,8 @@ from app.repositories.author_repository import AuthorRepository
 
 class AuthorService:
 
-    def __init__(self):
-        self.repository = AuthorRepository()
+    def __init__(self, db):
+        self.repository = AuthorRepository(db)
 
     def create_author(self, name):
         # Valida o nome do autor (não pode ser vazio)
