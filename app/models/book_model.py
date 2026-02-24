@@ -1,5 +1,5 @@
 # Importa tipos de coluna e chave estrangeira
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 
 # Permite criar relacionamento entre tabelas
 from sqlalchemy.orm import relationship
@@ -7,26 +7,24 @@ from sqlalchemy.orm import relationship
 # Importa Base para registrar a tabela
 from app.config.database import Base
 
-# Representa a tabela "books"
 class Book(Base):
+    __tablename__ = "books"  # Nome da tabela no banco
 
-    # Nome da tabela no banco
-    __tablename__ = "books"
+    # Chave primária do livro
+    id = Column(Integer, primary_key=True)
 
-    # Chave primária
-    id = Column(Integer, primary_key=True, index=True)
+    # Título do livro (campo obrigatório)
+    title = Column(String(255), nullable=False)
 
-    # Título do livro (obrigatório)
-    title = Column(String, nullable=False)
+    # Ano de publicação
+    published_year = Column(Integer, nullable=False)
 
-    # Ano de publicação (opcional)
-    publication_year = Column(Integer)
+    # Indica se o livro está disponível para empréstimo
+    available = Column(Boolean, default=True)
 
-    # Chave estrangeira que aponta para authors.id
-    # Isso cria o relacionamento no banco
-    author_id = Column(Integer, ForeignKey("authors.id"))
+    # Chave estrangeira apontando para a tabela authors
+    author_id = Column(Integer, ForeignKey("authors.id"), nullable=False)
 
-    # Relacionamento no nível do Python
-    # Permite acessar o autor assim:
-    # book.author.name
-    author = relationship("Author")
+    # Relacionamento ORM (não cria coluna nova)
+    # Permite acessar book.author
+    author = relationship("Author", back_populates="books")
