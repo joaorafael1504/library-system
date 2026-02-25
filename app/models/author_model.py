@@ -23,4 +23,4 @@ class Author(Base):
     
     # Um autor pode ter vários livros
     # Relacionamento 1:N
-    books = relationship("Book", back_populates="author", cascade="all, delete")
+    books = relationship("Book", back_populates="author")

@@ -25,3 +25,9 @@ class BookRepository:
     def delete(self, book):
         self.db.delete(book)
         self.db.commit()
+
+    # Atualiza um livro
+    def update(self, book):
+        self.db.commit()
+        self.db.refresh(book)
+        return book

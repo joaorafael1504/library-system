@@ -1,3 +1,5 @@
+from turtle import title
+
 from app.models.book_model import Book
 from app.repositories.book_repository import BookRepository
 from app.repositories.author_repository import AuthorRepository
@@ -25,7 +27,8 @@ class BookService:
         book = Book(
             title=title,
             published_year=published_year,
-            author_id=author_id
+            author_id=author_id,
+            author_name=author.name
         )
 
         # Salva no banco
@@ -49,3 +52,30 @@ class BookService:
             raise Exception("Book not found")
         # Deleta o livro usando o repository
         self.book_repository.delete(book)
+
+    # Atualiza livro
+    def update_book(self, book_id, title, published_year, author_id, available):
+        book = self.book_repository.find_by_id(book_id)
+        if not book:
+            raise Exception("Book not found")
+            # Atualizar autor se foi enviado
+        if author_id:
+            author = self.author_repository.get_by_id(author_id)
+
+        if not author:
+            raise ValueError("Author not found")
+
+        book.author_id = author.id
+        book.author_name = author.name  # se estiver duplicando
+
+    # Atualizações básicas
+        if title:
+            book.title = title
+
+        if published_year:
+            book.published_year = published_year
+
+        if available is not None:
+            book.available = available
+
+        return self.book_repository.update(book)

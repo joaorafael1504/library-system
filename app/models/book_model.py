@@ -24,6 +24,7 @@ class Book(Base):
 
     # Chave estrangeira apontando para a tabela authors
     author_id = Column(Integer, ForeignKey("authors.id"), nullable=False)
+    author_name = Column(String(100), nullable=False)
 
     # Relacionamento ORM (não cria coluna nova)
     # Permite acessar book.author

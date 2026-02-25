@@ -95,12 +95,14 @@ def update_author(author_id):
 # Endpoint para deletar autor
 @author_blueprint.route("/authors/<int:author_id>", methods=["DELETE"])
 def delete_author(author_id):
+    # Parâmetro opcional para deletar livros associados ao autor
+    delete_books = request.args.get("delete_books", "false").lower() == "true"
 
     db = SessionLocal()
     service = AuthorService(db)
 
     try:
-        service.delete_author(author_id)
+        service.delete_author(author_id, delete_books=delete_books)
         return jsonify({"message": "Author deleted successfully"})
 
     except ValueError as e:
