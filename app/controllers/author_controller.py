@@ -1,6 +1,17 @@
 from flask import Blueprint, request, jsonify
+from app import service
 from app.config.database import SessionLocal
 from app.service.author_service import AuthorService
+from app.schemas.author_schema import (
+    AuthorCreateDTO,
+    AuthorUpdateDTO,
+    AuthorResponseDTO
+)
+
+author_create_schema = AuthorCreateDTO()
+author_update_schema = AuthorUpdateDTO()
+author_response_schema = AuthorResponseDTO()
+authors_response_schema = AuthorResponseDTO(many=True)
 
 author_blueprint = Blueprint("author", __name__)
 
@@ -11,20 +22,13 @@ def create_author():
     db = SessionLocal()  # cria sessão
     service = AuthorService(db)  # passa sessão
 
-    data = request.get_json()
-    name = data.get("name")
+    data = author_create_schema.load(request.get_json())
 
-    try:
-        author = service.create_author(name)
+    author = service.create_author(data["name"])
 
-        return jsonify({
-            "id": author.id,
-            "name": author.name
-        }), 201
+    result = author_response_schema.dump(author)
 
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
+    return jsonify(result), 201
 
 # Endpoint para listar autores
 @author_blueprint.route("/authors", methods=["GET"])
@@ -35,14 +39,8 @@ def list_authors():
 
     authors = service.list_authors()
 
-    return jsonify([
-        {
-            "id": author.id,
-            "name": author.name
-        }
-        for author in authors
-    ])
-
+    result = authors_response_schema.dump(authors)
+    return jsonify(result)
 
 # Endpoint para obter autor por ID
 @author_blueprint.route("/authors/<int:author_id>", methods=["GET"])
@@ -70,27 +68,13 @@ def update_author(author_id):
     db = SessionLocal()
     service = AuthorService(db)
 
-    data = request.get_json()
-    name = data.get("name")
+    data = author_update_schema.load(request.get_json())
 
-    try:
-        author = service.update_author(author_id, name)
+    author = service.update_author(author_id, data["name"])
 
-        return jsonify({
-            "id": author.id,
-            "name": author.name
-        })
+    result = author_response_schema.dump(author)
 
-    except ValueError as e:
-
-        if "not found" in str(e):
-            return jsonify({"error": str(e)}), 404
-
-        if "already in use" in str(e):
-            return jsonify({"error": str(e)}), 409
-
-        return jsonify({"error": str(e)}), 400
-
+    return jsonify(result)
 
 # Endpoint para deletar autor
 @author_blueprint.route("/authors/<int:author_id>", methods=["DELETE"])
