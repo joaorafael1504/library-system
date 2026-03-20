@@ -1,60 +1,76 @@
-# 📚 API de Biblioteca (CRUD)
+# 📚 Library System API
 
-## 📌 Descrição do Projeto
-
-Este projeto consiste no desenvolvimento de uma **API REST** para gerenciar livros de uma pequena biblioteca.
-
-O sistema permite realizar operações básicas de **CRUD (Create, Read, Update, Delete)**.
-
-A API será desenvolvida em **Python**, utilizando **PostgreSQL** como banco de dados, e os endpoints serão testados por meio do **Postman**.
+API REST desenvolvida para gerenciamento de livros e autores em uma biblioteca.
 
 ---
 
-## 🧱 Entidades do Sistema
+## 📌 Descrição
 
-O sistema irá possuir apenas duas entidades:
+Este projeto consiste em uma API construída em **Python com Flask**, permitindo realizar operações de CRUD (Create, Read, Update e Delete) sobre as entidades de autores e livros.
+
+A aplicação utiliza banco de dados relacional **PostgreSQL** e implementa boas práticas de desenvolvimento backend, incluindo validação de dados e padronização de respostas através de DTOs.
+
+---
+
+## 🧱 Entidades
+
+O sistema possui duas entidades principais:
 
 - **Autor**
 - **Livro**
 
----
-
-## 🔄 Funcionalidades CRUD
-
-### Autores
-- Criar autor  
-- Listar autores  
-- Atualizar autor  
-- Deletar autor (opcionalmente, remover também todos os livros associados a esse autor)  
-
-### Livros
-- Criar livro (associando a um autor existente)  
-- Listar livros (exibindo o nome do autor)  
-- Atualizar informações do livro  
-- Deletar livro  
-
----
-
-## 🛠️ Tecnologias Utilizadas
-- Python  
-- API REST  
-- PostgreSQL  
-- Postman (para testes dos endpoints)  
-
----
-
-## 🗄️ Banco de Dados
-
-O banco de dados segue um relacionamento simples:
+### Relação entre entidades
 
 - Um autor pode possuir vários livros  
 - Um livro pertence a um único autor  
 
 ---
 
-## 👤 Autor
+## ⚙️ Funcionalidades
 
-Desenvolvido por **João Rafael**.
+### 👤 Autores
+- Criar autor  
+- Listar autores  
+- Buscar autor por ID  
+- Atualizar autor  
+- Deletar autor  
+  - Opção de remover livros associados  
+
+---
+
+### 📖 Livros
+- Criar livro vinculado a um autor  
+- Listar livros com dados do autor  
+- Buscar livro por ID  
+- Atualizar informações do livro  
+- Deletar livro  
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Python**
+- **Flask**
+- **PostgreSQL**
+- **SQLAlchemy**
+- **Marshmallow (DTOs para validação e serialização)**
+- **Postman**
+- **Git & GitHub**
+
+---
+
+## 🚀 Melhorias Futuras
+
+- Implementação de autenticação (JWT)
+- Documentação automática com Swagger/OpenAPI
+- Deploy em ambiente de produção
+- Testes automatizados
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **João Rafael**
 
 ---
 
